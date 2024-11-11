@@ -3,12 +3,14 @@ import Channel from '../components/Channel';
 import MemberStatus from '../components/MemberStatus';
 import AudioControls from '../components/AudioControls';
 import { useToast } from '@/components/ui/use-toast';
+import { Menu, X, Radio } from 'lucide-react';
 
 const Index = () => {
   const { toast } = useToast();
   const [activeChannel, setActiveChannel] = useState('geral');
   const [isMuted, setIsMuted] = useState(false);
   const [isDeafened, setIsDeafened] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const channels = [
     { id: 'geral', name: 'Geral', memberCount: 8 },
@@ -26,6 +28,7 @@ const Index = () => {
 
   const handleChannelChange = (channelId: string) => {
     setActiveChannel(channelId);
+    setIsMobileMenuOpen(false);
     toast({
       title: "Canal alterado",
       description: `Você entrou no canal ${channels.find(c => c.id === channelId)?.name}`,
@@ -33,11 +36,33 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen flex">
-      {/* Sidebar com canais */}
-      <div className="w-64 bg-racing-black border-r border-racing-gray border-opacity-20">
+    <div className="min-h-screen flex flex-col md:flex-row">
+      {/* Mobile Header */}
+      <div className="md:hidden bg-racing-black p-4 flex items-center justify-between border-b border-racing-gray border-opacity-20">
+        <div className="flex items-center space-x-2">
+          <Radio className="text-racing-red" size={24} />
+          <h1 className="text-xl font-bold text-racing-red">Gearhead Racing</h1>
+        </div>
+        <button
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          className="p-2 hover:bg-racing-red hover:bg-opacity-10 rounded-md"
+        >
+          {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
+      </div>
+
+      {/* Sidebar */}
+      <div className={`
+        ${isMobileMenuOpen ? 'block' : 'hidden'} 
+        md:block w-full md:w-64 bg-racing-black border-r border-racing-gray border-opacity-20
+      `}>
         <div className="p-4">
-          <h1 className="text-2xl font-bold text-racing-red mb-6">Gearhead Racing</h1>
+          <div className="hidden md:block">
+            <div className="flex items-center space-x-2 mb-6">
+              <Radio className="text-racing-red" size={24} />
+              <h1 className="text-2xl font-bold text-racing-red">Gearhead Racing</h1>
+            </div>
+          </div>
           <div className="space-y-1">
             {channels.map((channel) => (
               <Channel
@@ -52,9 +77,9 @@ const Index = () => {
         </div>
       </div>
 
-      {/* Área principal */}
+      {/* Main Content */}
       <div className="flex-1 flex flex-col">
-        <div className="flex-1 p-6">
+        <div className="flex-1 p-4 md:p-6">
           <h2 className="text-xl font-bold mb-4">
             {channels.find(c => c.id === activeChannel)?.name}
           </h2>

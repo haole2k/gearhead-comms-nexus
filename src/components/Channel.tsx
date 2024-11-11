@@ -1,4 +1,5 @@
 import React from 'react';
+import { Radio } from 'lucide-react';
 
 interface ChannelProps {
   name: string;
@@ -16,7 +17,10 @@ const Channel: React.FC<ChannelProps> = ({ name, isActive, onClick, memberCount 
       }`}
     >
       <div className="flex items-center justify-between">
-        <span className="font-medium">{name}</span>
+        <div className="flex items-center space-x-2">
+          <Radio size={16} className={isActive ? 'text-racing-red' : ''} />
+          <span className="font-medium">{name}</span>
+        </div>
         <span className="text-sm opacity-75">{memberCount} membros</span>
       </div>
     </div>

@@ -1,4 +1,5 @@
 import React from 'react';
+import { UserRound, Signal, SignalHigh } from 'lucide-react';
 
 interface Member {
   id: string;
@@ -14,15 +15,25 @@ interface MemberStatusProps {
 
 const MemberStatus: React.FC<MemberStatusProps> = ({ member }) => {
   return (
-    <div className={`flex items-center space-x-3 p-2 ${member.isOnline ? 'member-online' : 'opacity-50'} ${member.isSpeaking ? 'member-speaking' : ''}`}>
+    <div className={`flex items-center space-x-3 p-2 rounded-lg hover:bg-racing-red hover:bg-opacity-5 transition-all
+      ${member.isOnline ? 'member-online' : 'opacity-50'} 
+      ${member.isSpeaking ? 'member-speaking' : ''}`}
+    >
       <div className="flex-shrink-0">
-        <div className="w-8 h-8 rounded-full bg-racing-gray flex items-center justify-center">
-          {member.name[0].toUpperCase()}
+        <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-racing-gray bg-opacity-10 flex items-center justify-center">
+          <UserRound className="w-5 h-5 md:w-6 md:h-6" />
         </div>
       </div>
-      <div>
-        <p className="font-medium">{member.name}</p>
-        <p className="text-sm text-racing-gray opacity-75">{member.role}</p>
+      <div className="flex-1 min-w-0">
+        <p className="font-medium truncate">{member.name}</p>
+        <p className="text-sm text-racing-gray opacity-75 truncate">{member.role}</p>
+      </div>
+      <div className="flex-shrink-0">
+        {member.isSpeaking ? (
+          <SignalHigh className="w-4 h-4 text-racing-red animate-pulse" />
+        ) : (
+          member.isOnline && <Signal className="w-4 h-4" />
+        )}
       </div>
     </div>
   );

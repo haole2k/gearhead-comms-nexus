@@ -40,12 +40,12 @@ const Index = () => {
       {/* Mobile Header */}
       <div className="md:hidden bg-racing-black p-4 flex items-center justify-between border-b border-racing-gray border-opacity-20">
         <div className="flex items-center space-x-2">
-          <Radio className="text-racing-red" size={24} />
-          <h1 className="text-xl font-bold text-racing-red">Gearhead Racing</h1>
+          <Radio className="text-racing-green" size={24} />
+          <h1 className="text-xl font-bold text-racing-green">Bacarin Racing</h1>
         </div>
         <button
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          className="p-2 hover:bg-racing-red hover:bg-opacity-10 rounded-md"
+          className="p-2 hover:bg-racing-green hover:bg-opacity-10 rounded-md"
         >
           {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
@@ -59,8 +59,8 @@ const Index = () => {
         <div className="p-4">
           <div className="hidden md:block">
             <div className="flex items-center space-x-2 mb-6">
-              <Radio className="text-racing-red" size={24} />
-              <h1 className="text-2xl font-bold text-racing-red">Gearhead Racing</h1>
+              <Radio className="text-racing-green" size={24} />
+              <h1 className="text-2xl font-bold text-racing-green">Bacarin Racing</h1>
             </div>
           </div>
           <div className="space-y-1">

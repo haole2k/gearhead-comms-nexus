@@ -38,7 +38,7 @@
 }
 
 .channel-active {
-  @apply bg-racing-red bg-opacity-20 border-l-4 border-racing-red;
+  @apply bg-racing-green bg-opacity-20 border-l-4 border-racing-green;
 }
 
 .member-online {
@@ -46,5 +46,5 @@
 }
 
 .member-speaking {
-  @apply animate-pulse text-racing-red;
+  @apply animate-pulse text-racing-green;
 }

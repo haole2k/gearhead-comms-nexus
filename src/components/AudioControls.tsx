@@ -19,7 +19,7 @@ const AudioControls: React.FC<AudioControlsProps> = ({
       <button
         onClick={onToggleMute}
         className={`p-3 md:p-2 rounded-full transition-all ${
-          isMuted ? 'bg-racing-red bg-opacity-20 text-racing-red' : 'hover:bg-racing-red hover:bg-opacity-10'
+          isMuted ? 'bg-racing-green bg-opacity-20 text-racing-green' : 'hover:bg-racing-green hover:bg-opacity-10'
         }`}
         title={isMuted ? "Ativar microfone" : "Desativar microfone"}
       >
@@ -28,7 +28,7 @@ const AudioControls: React.FC<AudioControlsProps> = ({
       <button
         onClick={onToggleDeafen}
         className={`p-3 md:p-2 rounded-full transition-all ${
-          isDeafened ? 'bg-racing-red bg-opacity-20 text-racing-red' : 'hover:bg-racing-red hover:bg-opacity-10'
+          isDeafened ? 'bg-racing-green bg-opacity-20 text-racing-green' : 'hover:bg-racing-green hover:bg-opacity-10'
         }`}
         title={isDeafened ? "Ativar áudio" : "Desativar áudio"}
       >

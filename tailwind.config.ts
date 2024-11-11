@@ -20,8 +20,9 @@ export default {
     extend: {
       colors: {
         racing: {
-          red: "#FF1E1E",
+          green: "#00FF00",
           black: "#1A1A1A",
+          red: "#FF1E1E",
           gray: "#E5E5E5",
         },
         border: "hsl(var(--border))",

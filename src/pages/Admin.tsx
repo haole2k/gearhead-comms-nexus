@@ -15,6 +15,7 @@ import {
 import AdminHeader from '@/components/admin/AdminHeader';
 import UserTable from '@/components/admin/UserTable';
 import UserForm from '@/components/admin/UserForm';
+import { Dashboard } from '@/components/admin/dashboard/Dashboard';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -25,6 +26,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const Admin = () => {
   const { user } = useAuth();
@@ -101,46 +103,57 @@ const Admin = () => {
       <AdminHeader />
       
       <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        <div className="mb-6 flex justify-between items-center">
-          <h2 className="text-xl font-semibold dark:text-white">Gerenciar Usuários</h2>
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button>
-                <Plus className="mr-2 h-4 w-4" />
-                Novo Usuário
-              </Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Criar Novo Usuário</DialogTitle>
-              </DialogHeader>
-              <UserForm onSubmit={createUserMutation.mutate} />
-            </DialogContent>
-          </Dialog>
-        </div>
+        <Tabs defaultValue="dashboard" className="space-y-4">
+          <TabsList>
+            <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
+            <TabsTrigger value="users">Usuários</TabsTrigger>
+          </TabsList>
+          <TabsContent value="dashboard" className="space-y-4">
+            <Dashboard />
+          </TabsContent>
+          <TabsContent value="users">
+            <div className="mb-6 flex justify-between items-center">
+              <h2 className="text-xl font-semibold dark:text-white">Gerenciar Usuários</h2>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button>
+                    <Plus className="mr-2 h-4 w-4" />
+                    Novo Usuário
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Criar Novo Usuário</DialogTitle>
+                  </DialogHeader>
+                  <UserForm onSubmit={createUserMutation.mutate} />
+                </DialogContent>
+              </Dialog>
+            </div>
 
-        <UserTable
-          users={users || []}
-          onEdit={setSelectedUser}
-          onDelete={handleDelete}
-        />
+            <UserTable
+              users={users || []}
+              onEdit={setSelectedUser}
+              onDelete={handleDelete}
+            />
 
-        <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Confirmar exclusão</AlertDialogTitle>
-              <AlertDialogDescription>
-                Tem certeza que deseja excluir este usuário? Esta ação não pode ser desfeita.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel>Cancelar</AlertDialogCancel>
-              <AlertDialogAction onClick={confirmDelete}>
-                Confirmar
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
+            <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Confirmar exclusão</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Tem certeza que deseja excluir este usuário? Esta ação não pode ser desfeita.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                  <AlertDialogAction onClick={confirmDelete}>
+                    Confirmar
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );

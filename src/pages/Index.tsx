@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Channel from '../components/Channel';
 import MemberStatus from '../components/MemberStatus';
 import AudioControls from '../components/AudioControls';
 import { useToast } from '@/components/ui/use-toast';
-import { Menu, X, Radio } from 'lucide-react';
+import { Menu, X, Radio, UserRound, LayoutDashboard } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
+import { Button } from '@/components/ui/button';
 
 const Index = () => {
   const { toast } = useToast();
+  const navigate = useNavigate();
+  const { user } = useAuth();
   const [activeChannel, setActiveChannel] = useState('geral');
   const [isMuted, setIsMuted] = useState(false);
   const [isDeafened, setIsDeafened] = useState(false);
@@ -74,12 +79,32 @@ const Index = () => {
           <Radio className="text-racing-green" size={24} />
           <h1 className="text-xl font-bold text-racing-green">Bacarin Racing</h1>
         </div>
-        <button
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          className="p-2 hover:bg-racing-green hover:bg-opacity-10 rounded-md transition-colors"
-        >
-          {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
+        <div className="flex items-center gap-2">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => navigate('/profile')}
+            className="hover:bg-racing-green/10"
+          >
+            <UserRound className="h-5 w-5" />
+          </Button>
+          {user?.role === 'ADMIN' && (
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => navigate('/admin')}
+              className="hover:bg-racing-green/10"
+            >
+              <LayoutDashboard className="h-5 w-5" />
+            </Button>
+          )}
+          <button
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="p-2 hover:bg-racing-green hover:bg-opacity-10 rounded-md transition-colors"
+          >
+            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
       </div>
 
       {/* Sidebar */}
@@ -89,9 +114,31 @@ const Index = () => {
       `}>
         <div className="p-4">
           <div className="hidden md:block">
-            <div className="flex items-center space-x-2 mb-6">
-              <Radio className="text-racing-green" size={24} />
-              <h1 className="text-2xl font-bold text-racing-green">Bacarin Racing</h1>
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center space-x-2">
+                <Radio className="text-racing-green" size={24} />
+                <h1 className="text-2xl font-bold text-racing-green">Bacarin Racing</h1>
+              </div>
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => navigate('/profile')}
+                  className="hover:bg-racing-green/10"
+                >
+                  <UserRound className="h-5 w-5" />
+                </Button>
+                {user?.role === 'ADMIN' && (
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => navigate('/admin')}
+                    className="hover:bg-racing-green/10"
+                  >
+                    <LayoutDashboard className="h-5 w-5" />
+                  </Button>
+                )}
+              </div>
             </div>
           </div>
           <div className="space-y-1">

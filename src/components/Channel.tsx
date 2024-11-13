@@ -3,9 +3,11 @@ import { MessageSquare, Radio, Users, Gauge, AlertTriangle, Volume2, VolumeX } f
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
+export type ChannelType = 'general' | 'pit_stop' | 'strategy' | 'telemetry' | 'emergency';
+
 interface ChannelProps {
   name: string;
-  type: string;
+  type: ChannelType;
   isActive: boolean;
   onClick: () => void;
   memberCount: number;
@@ -14,8 +16,8 @@ interface ChannelProps {
   onToggleMute?: () => void;
 }
 
-const getChannelIcon = (type: string) => {
-  switch (type.toLowerCase()) {
+const getChannelIcon = (type: ChannelType) => {
+  switch (type) {
     case 'general':
       return <MessageSquare size={16} />;
     case 'pit_stop':

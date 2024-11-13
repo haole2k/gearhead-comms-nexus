@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Channel from '../components/Channel';
+import Channel, { ChannelType } from '../components/Channel';
 import MemberStatus from '../components/MemberStatus';
 import AudioControls from '../components/AudioControls';
 import { useToast } from '@/components/ui/use-toast';
@@ -18,12 +18,11 @@ const Index = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const channels = [
-    { id: 'geral', name: 'Geral', memberCount: 8 },
-    { id: 'pit-stop', name: 'Pit Stop', memberCount: 4 },
-    { id: 'estrategia', name: 'Estratégia', memberCount: 3 },
-    { id: 'mecanicos', name: 'Mecânicos', memberCount: 5 },
-    { id: 'telemetria', name: 'Telemetria', memberCount: 2 },
-    { id: 'emergencia', name: 'Emergência', memberCount: 1 },
+    { id: 'geral', name: 'Geral', type: 'general' as ChannelType, memberCount: 8 },
+    { id: 'pit-stop', name: 'Pit Stop', type: 'pit_stop' as ChannelType, memberCount: 4 },
+    { id: 'estrategia', name: 'Estratégia', type: 'strategy' as ChannelType, memberCount: 3 },
+    { id: 'telemetria', name: 'Telemetria', type: 'telemetry' as ChannelType, memberCount: 2 },
+    { id: 'emergencia', name: 'Emergência', type: 'emergency' as ChannelType, memberCount: 1 },
   ];
 
   const members = [
@@ -146,6 +145,7 @@ const Index = () => {
               <Channel
                 key={channel.id}
                 name={channel.name}
+                type={channel.type}
                 isActive={activeChannel === channel.id}
                 onClick={() => handleChannelChange(channel.id)}
                 memberCount={channel.memberCount}

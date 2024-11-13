@@ -24,19 +24,20 @@ const Index = () => {
   const members = [
     { 
       id: '1', 
-      name: 'João Silva', 
-      role: 'Chefe de Equipe', 
-      isOnline: true, 
-      isSpeaking: false,
-      isTeamLead: true 
-    },
-    { 
-      id: '2', 
-      name: 'Maria Santos', 
+      name: 'Eduardo Bacarin', 
       role: 'Piloto Principal', 
       isOnline: true, 
       isSpeaking: true,
-      lapTime: '1:32.456' 
+      lapTime: '1:32.456',
+      isTeamLead: true
+    },
+    { 
+      id: '2', 
+      name: 'Flavio Bacarin', 
+      role: 'Piloto', 
+      isOnline: true, 
+      isSpeaking: false,
+      lapTime: '1:33.128'
     },
     { 
       id: '3', 

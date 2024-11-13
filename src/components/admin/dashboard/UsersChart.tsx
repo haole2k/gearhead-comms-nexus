@@ -1,16 +1,17 @@
 import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
-const data = [
-  { name: "Jan", total: 12 },
-  { name: "Fev", total: 15 },
-  { name: "Mar", total: 23 },
-  { name: "Abr", total: 35 },
-  { name: "Mai", total: 38 },
-  { name: "Jun", total: 45 },
-];
+import { useQuery } from "@tanstack/react-query";
 
 export function UsersChart() {
+  const { data: userGrowth } = useQuery({
+    queryKey: ['user-growth'],
+    queryFn: async () => {
+      const response = await fetch('/api/stats/user-growth');
+      if (!response.ok) throw new Error('Failed to fetch user growth data');
+      return response.json();
+    }
+  });
+
   return (
     <Card>
       <CardHeader>
@@ -19,7 +20,7 @@ export function UsersChart() {
       <CardContent>
         <div className="h-[200px]">
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={data}>
+            <LineChart data={userGrowth || []}>
               <XAxis dataKey="name" stroke="#888888" fontSize={12} />
               <YAxis stroke="#888888" fontSize={12} />
               <Tooltip />

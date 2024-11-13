@@ -2,28 +2,39 @@ import { Users, UserCheck, Activity } from "lucide-react";
 import { StatCard } from "./StatCard";
 import { UsersChart } from "./UsersChart";
 import { MembersDistributionChart } from "./MembersDistributionChart";
+import { useQuery } from "@tanstack/react-query";
+import prisma from "@/lib/prisma";
 
 export function Dashboard() {
+  const { data: stats } = useQuery({
+    queryKey: ['dashboard-stats'],
+    queryFn: async () => {
+      const response = await fetch('/api/stats');
+      if (!response.ok) throw new Error('Failed to fetch stats');
+      return response.json();
+    }
+  });
+
   return (
     <div className="space-y-4 p-8 pt-6">
       <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
       <div className="grid gap-4 md:grid-cols-3">
         <StatCard
           title="Total de Usuários"
-          value="27"
-          description="+20.1% em relação ao mês anterior"
+          value={stats?.totalUsers || '0'}
+          description={stats?.userGrowth || 'Carregando...'}
           icon={<Users className="h-4 w-4 text-racing-green" />}
         />
         <StatCard
           title="Membros Ativos"
-          value="16"
-          description="92% dos membros ativos hoje"
+          value={stats?.activeMembers || '0'}
+          description={stats?.activeMembersPercentage || 'Carregando...'}
           icon={<UserCheck className="h-4 w-4 text-racing-green" />}
         />
         <StatCard
           title="Taxa de Engajamento"
-          value="89%"
-          description="12% maior que a média"
+          value={stats?.engagementRate || '0%'}
+          description={stats?.engagementComparison || 'Carregando...'}
           icon={<Activity className="h-4 w-4 text-racing-green" />}
         />
       </div>

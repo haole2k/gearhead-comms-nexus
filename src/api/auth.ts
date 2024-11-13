@@ -1,28 +1,16 @@
-// Mock user data - In production, this would come from a backend API
-const MOCK_USERS = [
-  {
-    username: "admin",
-    password: "admin",
-    role: "ADMIN"
-  },
-  {
-    username: "user",
-    password: "user123",
-    role: "USER"
-  }
-];
+import prisma from '../lib/prisma';
+import { User } from '@prisma/client';
 
 export const loginUser = async (username: string, password: string) => {
-  // Simulate API delay
-  await new Promise(resolve => setTimeout(resolve, 500));
-
-  const user = MOCK_USERS.find(u => u.username === username);
+  const user = await prisma.user.findUnique({
+    where: { username }
+  });
 
   if (!user) {
     throw new Error('Usuário não encontrado');
   }
 
-  if (user.password !== password) {
+  if (user.password !== password) { // In production, use proper password hashing
     throw new Error('Senha incorreta');
   }
 

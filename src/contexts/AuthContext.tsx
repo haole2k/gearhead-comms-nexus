@@ -1,8 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -18,9 +15,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const navigate = useNavigate();
 
   const login = async (username: string, password: string) => {
+    // Simplified authentication logic for browser environment
     if (username === 'admin' && password === 'admin') {
-      setUser({ username: 'admin', role: 'ADMIN' });
-      localStorage.setItem('user', JSON.stringify({ username: 'admin', role: 'ADMIN' }));
+      const userData = { username: 'admin', role: 'ADMIN' };
+      setUser(userData);
+      localStorage.setItem('user', JSON.stringify(userData));
       navigate('/');
     } else {
       throw new Error('Invalid credentials');

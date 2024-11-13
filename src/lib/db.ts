@@ -1,10 +1,10 @@
-import { PrismaClient } from '@prisma/client'
-
-const prisma = new PrismaClient()
+import prisma from './prisma'
 
 export async function testConnection() {
   try {
     await prisma.$connect()
+    // Test the connection with a simple query
+    await prisma.$queryRaw`SELECT 1`
     return true
   } catch (error) {
     console.error('Database connection error:', error)

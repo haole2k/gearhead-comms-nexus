@@ -1,51 +1,17 @@
-// Remove direct Prisma usage from frontend
+```typescript
+import prisma from './prisma'
+
 export async function testConnection() {
   try {
-    const response = await fetch('/api/test-connection');
-    const data = await response.json();
-    return data.success;
+    const result = await prisma.$queryRaw`SELECT 1+1 as result`
+    return { success: true, result }
   } catch (error) {
-    console.error('API connection test failed:', error);
-    return false;
+    console.error('Database connection error:', error)
+    return { success: false, error }
   }
 }
 
-export async function getUsers() {
-  try {
-    const response = await fetch('/api/users');
-    return await response.json();
-  } catch (error) {
-    console.error('Error fetching users:', error);
-    throw error;
-  }
+export const db = {
+  testConnection,
 }
-
-export async function getMembers() {
-  try {
-    const response = await fetch('/api/members');
-    return await response.json();
-  } catch (error) {
-    console.error('Error fetching members:', error);
-    throw error;
-  }
-}
-
-export async function getChannels() {
-  try {
-    const response = await fetch('/api/channels');
-    return await response.json();
-  } catch (error) {
-    console.error('Error fetching channels:', error);
-    throw error;
-  }
-}
-
-export async function getCommunications() {
-  try {
-    const response = await fetch('/api/communications');
-    return await response.json();
-  } catch (error) {
-    console.error('Error fetching communications:', error);
-    throw error;
-  }
-}
+```

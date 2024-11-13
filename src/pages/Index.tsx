@@ -45,7 +45,7 @@ const Index = () => {
         </div>
         <button
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          className="p-2 hover:bg-racing-green hover:bg-opacity-10 rounded-md"
+          className="p-2 hover:bg-racing-green hover:bg-opacity-10 rounded-md transition-colors"
         >
           {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
@@ -53,7 +53,7 @@ const Index = () => {
 
       {/* Sidebar */}
       <div className={`
-        ${isMobileMenuOpen ? 'block' : 'hidden'} 
+        ${isMobileMenuOpen ? 'mobile-menu' : 'hidden'} 
         md:block w-full md:w-64 bg-racing-black border-r border-racing-gray border-opacity-20
       `}>
         <div className="p-4">
@@ -80,7 +80,7 @@ const Index = () => {
       {/* Main Content */}
       <div className="flex-1 flex flex-col">
         <div className="flex-1 p-4 md:p-6">
-          <h2 className="text-xl font-bold mb-4">
+          <h2 className="text-xl font-bold mb-4 slide-in">
             {channels.find(c => c.id === activeChannel)?.name}
           </h2>
           <div className="space-y-2">

@@ -21,35 +21,69 @@ Antes de começar, você precisa ter instalado em sua máquina:
 - npm ou yarn
 - Git
 
-## 🔧 Instalação
+## 🔧 Instalação e Configuração
 
-1. Clone o repositório:
+### Clonar o Repositório
 ```bash
 git clone https://github.com/seu-usuario/bacarin-racing-comms.git
-```
-
-2. Acesse a pasta do projeto:
-```bash
 cd bacarin-racing-comms
 ```
 
-3. Instale as dependências:
+### Instalar Dependências
 ```bash
 npm install
 # ou
 yarn install
 ```
 
-4. Inicie o servidor de desenvolvimento:
+### Configurar Variáveis de Ambiente
+1. Copie o arquivo `.env.example` para `.env`
+2. Preencha as variáveis de ambiente necessárias
+
+### Gerar Prisma Client
+```bash
+npx prisma generate
+```
+
+### Executar Migrations do Banco de Dados
+```bash
+npx prisma migrate dev
+```
+
+### Iniciar Servidor de Desenvolvimento
 ```bash
 npm run dev
 # ou
 yarn dev
 ```
 
-5. Acesse a aplicação em:
+### Acessar a Aplicação
+Abra seu navegador em:
 ```
 http://localhost:5173
+```
+
+### Comandos Adicionais
+
+#### Rodar Testes
+```bash
+npm test
+# ou
+yarn test
+```
+
+#### Build para Produção
+```bash
+npm run build
+# ou
+yarn build
+```
+
+#### Visualizar Build de Produção
+```bash
+npm run preview
+# ou
+yarn preview
 ```
 
 ## 🎨 Funcionalidades
@@ -100,24 +134,18 @@ A aplicação é totalmente responsiva e se adapta a diferentes tamanhos de tela
 4. Push para a branch (`git push origin feature/AmazingFeature`)
 5. Abra um Pull Request
 
-### Padrões de Commit
-
-Utilizamos o padrão Conventional Commits:
-- `feat:` Nova funcionalidade
-- `fix:` Correção de bug
-- `docs:` Alteração em documentação
-- `style:` Formatação de código
-- `refactor:` Refatoração de código
-- `test:` Adição/modificação de testes
-
 ## 📝 Licença
 
 Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
 
 ## 🏁 Bacarin Racing
 
-Desenvolvido especialmente para a equipe Bacarin Racing, mantendo as cores e identidade visual da equipe. Para mais informações sobre a equipe, visite [Bacarin Racing](https://www.bacarinracing.com).
+Desenvolvido especialmente para a equipe Bacarin Racing, mantendo as cores e identidade visual da equipe.
 
 ## 📞 Suporte
 
 Para reportar bugs ou sugerir novas funcionalidades, por favor abra uma [issue](https://github.com/seu-usuario/bacarin-racing-comms/issues).
+
+## 🛠️ Desenvolvido por
+
+[Devsign Sistemas](https://www.devsign.com.br)

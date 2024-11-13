@@ -1,5 +1,5 @@
 import React from 'react';
-import { Radio } from 'lucide-react';
+import { MessageSquare, Radio, Users, Gauge, AlertTriangle } from 'lucide-react';
 
 interface ChannelProps {
   name: string;
@@ -7,6 +7,23 @@ interface ChannelProps {
   onClick: () => void;
   memberCount: number;
 }
+
+const getChannelIcon = (name: string) => {
+  switch (name.toLowerCase()) {
+    case 'geral':
+      return <MessageSquare size={16} />;
+    case 'pit stop':
+      return <Users size={16} />;
+    case 'estratégia':
+      return <Radio size={16} />;
+    case 'telemetria':
+      return <Gauge size={16} />;
+    case 'emergência':
+      return <AlertTriangle size={16} />;
+    default:
+      return <MessageSquare size={16} />;
+  }
+};
 
 const Channel: React.FC<ChannelProps> = ({ name, isActive, onClick, memberCount }) => {
   return (
@@ -18,7 +35,7 @@ const Channel: React.FC<ChannelProps> = ({ name, isActive, onClick, memberCount 
     >
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-2">
-          <Radio size={16} className={isActive ? 'text-racing-green' : ''} />
+          {getChannelIcon(name)}
           <span className="font-medium">{name}</span>
         </div>
         <span className="text-sm opacity-75">{memberCount} membros</span>

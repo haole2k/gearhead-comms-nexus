@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/components/ui/use-toast';
+import { loginUser } from '@/api/auth';
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -18,17 +19,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const login = async (username: string, password: string) => {
     try {
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Credenciais inválidas');
-      }
-
-      const userData = await response.json();
+      const userData = await loginUser(username, password);
       setUser(userData);
       localStorage.setItem('user', JSON.stringify(userData));
       navigate('/');
@@ -40,7 +31,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     } catch (error) {
       toast({
         title: "Erro no login",
-        description: "Credenciais inválidas",
+        description: error instanceof Error ? error.message : "Credenciais inválidas",
         variant: "destructive",
       });
       throw error;

@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Pencil, Trash2 } from 'lucide-react';
-import { User } from '@prisma/client';
+import { User } from '@/types/user';
 
 interface UserTableProps {
   users: User[];

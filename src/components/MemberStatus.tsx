@@ -1,6 +1,7 @@
 import React from 'react';
-import { UserRound, Signal, SignalHigh, Crown, Timer, Flag } from 'lucide-react';
+import { UserRound, Signal, SignalHigh, Crown, Timer, Flag, Car, Gauge } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { cn } from "@/lib/utils";
 
 interface Member {
   id: string;
@@ -11,6 +12,11 @@ interface Member {
   lastActive?: string;
   isTeamLead?: boolean;
   lapTime?: string;
+  telemetryData?: {
+    speed?: number;
+    fuel?: number;
+    tireWear?: number;
+  };
 }
 
 interface MemberStatusProps {
@@ -22,13 +28,19 @@ const MemberStatus: React.FC<MemberStatusProps> = ({ member }) => {
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <div className={`flex items-center space-x-3 p-2 rounded-lg hover:bg-racing-green hover:bg-opacity-5 transition-all
-            ${member.isOnline ? 'member-online' : 'opacity-50'} 
-            ${member.isSpeaking ? 'member-speaking' : ''}`}
-          >
+          <div className={cn(
+            "flex items-center space-x-3 p-2 rounded-lg transition-all",
+            "hover:bg-racing-green hover:bg-opacity-5",
+            member.isOnline ? "opacity-100" : "opacity-50",
+            member.isSpeaking && "animate-pulse border border-racing-green"
+          )}>
             <div className="flex-shrink-0 relative">
               <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-racing-gray bg-opacity-10 flex items-center justify-center">
-                <UserRound className="w-5 h-5 md:w-6 md:h-6" />
+                {member.role.includes('DRIVER') ? (
+                  <Car className="w-5 h-5 md:w-6 md:h-6" />
+                ) : (
+                  <UserRound className="w-5 h-5 md:w-6 md:h-6" />
+                )}
               </div>
               {member.isTeamLead && (
                 <Crown className="w-4 h-4 text-racing-green absolute -top-1 -right-1" />
@@ -42,6 +54,12 @@ const MemberStatus: React.FC<MemberStatusProps> = ({ member }) => {
                   <div className="flex items-center text-xs text-racing-green">
                     <Timer className="w-3 h-3 mr-1" />
                     {member.lapTime}
+                  </div>
+                )}
+                {member.telemetryData && (
+                  <div className="flex items-center text-xs text-racing-blue">
+                    <Gauge className="w-3 h-3 mr-1" />
+                    {member.telemetryData.speed}km/h
                   </div>
                 )}
               </div>
@@ -66,6 +84,13 @@ const MemberStatus: React.FC<MemberStatusProps> = ({ member }) => {
           )}
           {member.lapTime && (
             <p className="text-xs text-racing-green">Melhor volta: {member.lapTime}</p>
+          )}
+          {member.telemetryData && (
+            <>
+              <p className="text-xs text-racing-blue">Velocidade: {member.telemetryData.speed}km/h</p>
+              <p className="text-xs text-racing-orange">Combustível: {member.telemetryData.fuel}%</p>
+              <p className="text-xs text-racing-purple">Desgaste dos pneus: {member.telemetryData.tireWear}%</p>
+            </>
           )}
         </TooltipContent>
       </Tooltip>

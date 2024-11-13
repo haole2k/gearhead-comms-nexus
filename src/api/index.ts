@@ -16,18 +16,14 @@ router.get('/test-connection', async (req, res) => {
 router.get('/stats', async (req, res) => {
   try {
     const totalUsers = await prisma.user.count();
-    const activeMembers = await prisma.member.count({
-      where: { isOnline: true }
+    const adminCount = await prisma.user.count({
+      where: { role: 'ADMIN' }
     });
-    const totalMembers = await prisma.member.count();
 
     res.json({
       totalUsers,
-      activeMembers,
-      activeMembersPercentage: `${Math.round((activeMembers / totalMembers) * 100)}% dos membros ativos hoje`,
-      userGrowth: '+20.1% em relação ao mês anterior', // This would need actual calculation
-      engagementRate: '89%', // This would need actual calculation
-      engagementComparison: '12% maior que a média' // This would need actual calculation
+      adminCount,
+      adminPercentage: `${Math.round((adminCount / totalUsers) * 100)}% são administradores`,
     });
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch stats' });
@@ -69,58 +65,20 @@ router.get('/stats/user-growth', async (req, res) => {
   }
 });
 
-router.get('/stats/member-distribution', async (req, res) => {
-  try {
-    const leaders = await prisma.member.count({
-      where: { isTeamLead: true }
-    });
-    
-    const members = await prisma.member.count({
-      where: { isTeamLead: false }
-    });
-
-    res.json([
-      { name: "Líderes", value: leaders },
-      { name: "Membros", value: members }
-    ]);
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch member distribution' });
-  }
-});
-
 router.get('/users', async (req, res) => {
   try {
-    const users = await prisma.user.findMany();
+    const users = await prisma.user.findMany({
+      select: {
+        id: true,
+        username: true,
+        role: true,
+        createdAt: true,
+        updatedAt: true
+      }
+    });
     res.json(users);
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch users' });
-  }
-});
-
-router.get('/members', async (req, res) => {
-  try {
-    const members = await prisma.member.findMany();
-    res.json(members);
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch members' });
-  }
-});
-
-router.get('/channels', async (req, res) => {
-  try {
-    const channels = await prisma.channel.findMany();
-    res.json(channels);
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch channels' });
-  }
-});
-
-router.get('/communications', async (req, res) => {
-  try {
-    const communications = await prisma.communication.findMany();
-    res.json(communications);
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch communications' });
   }
 });
 

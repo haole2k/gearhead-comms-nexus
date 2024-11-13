@@ -1,5 +1,4 @@
 import prisma from '../lib/prisma';
-import { User } from '@prisma/client';
 
 export const loginUser = async (username: string, password: string) => {
   const user = await prisma.user.findUnique({

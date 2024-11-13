@@ -20,13 +20,13 @@ const Login = () => {
     try {
       await login(data.username, data.password);
       toast({
-        title: 'Login successful',
-        description: 'Welcome back!',
+        title: 'Login realizado com sucesso',
+        description: 'Bem-vindo de volta!',
       });
     } catch (error) {
       toast({
-        title: 'Error',
-        description: 'Invalid credentials',
+        title: 'Erro',
+        description: 'Credenciais inválidas',
         variant: 'destructive',
       });
     }
@@ -37,7 +37,7 @@ const Login = () => {
       <div className="w-full max-w-md space-y-8 bg-white/5 p-8 rounded-lg">
         <div className="text-center">
           <h2 className="text-3xl font-bold text-racing-green">Bacarin Racing</h2>
-          <p className="mt-2 text-sm text-racing-gray">Sign in to your account</p>
+          <p className="mt-2 text-sm text-racing-gray">Entre na sua conta</p>
         </div>
         <form onSubmit={handleSubmit(onSubmit)} className="mt-8 space-y-6">
           <div className="space-y-4">
@@ -46,7 +46,7 @@ const Login = () => {
               <Input
                 {...register('username')}
                 type="text"
-                placeholder="Username"
+                placeholder="Usuário"
                 className="pl-10"
               />
             </div>
@@ -55,13 +55,13 @@ const Login = () => {
               <Input
                 {...register('password')}
                 type="password"
-                placeholder="Password"
+                placeholder="Senha"
                 className="pl-10"
               />
             </div>
           </div>
           <Button type="submit" className="w-full bg-racing-green hover:bg-racing-green/90">
-            Sign in
+            Entrar
           </Button>
         </form>
       </div>

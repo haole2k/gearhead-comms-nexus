@@ -11,8 +11,7 @@ model User {
   id        String   @id @default(uuid())
   username  String   @unique
   password  String
-  role      String   @default("USER")
-  settings  String?  // Stored as JSON string
+  role      String   @default("ADMIN")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

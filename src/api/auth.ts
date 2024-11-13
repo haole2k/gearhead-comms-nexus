@@ -1,30 +1,84 @@
 import prisma from '../lib/prisma';
 import { hash, compare } from 'bcryptjs';
 
-export const loginUser = async (username: string, password: string) => {
-  // Validate admin credentials
-  if (username !== 'admin' || password !== 'admin') {
-    throw new Error('Credenciais inválidas');
-  }
+const ADMIN_USERNAME = 'admin';
+const ADMIN_PASSWORD = 'admin';
 
-  // Get or create admin user
-  let user = await prisma.user.findUnique({
-    where: { username: 'admin' }
+export const loginUser = async (username: string, password: string) => {
+  // Find user
+  const user = await prisma.user.findUnique({
+    where: { username }
   });
 
-  if (!user) {
-    // Create admin user if it doesn't exist
-    user = await prisma.user.create({
+  // If no user exists and it's trying to login as admin, create admin account
+  if (!user && username === ADMIN_USERNAME) {
+    const hashedPassword = await hash(ADMIN_PASSWORD, 10);
+    const newAdminUser = await prisma.user.create({
       data: {
-        username: 'admin',
-        password: 'admin', // In a real application, this should be hashed
-        role: 'ADMIN'
+        username: ADMIN_USERNAME,
+        password: hashedPassword,
+        role: 'ADMIN',
+        active: true
+      }
+    });
+    
+    if (password === ADMIN_PASSWORD) {
+      return {
+        username: newAdminUser.username,
+        role: newAdminUser.role
+      };
+    }
+  }
+
+  // If user exists, verify password and active status
+  if (user) {
+    if (!user.active) {
+      throw new Error('Usuário inativo');
+    }
+
+    const isAdmin = user.username === ADMIN_USERNAME;
+    const isValidPassword = isAdmin 
+      ? password === ADMIN_PASSWORD 
+      : await compare(password, user.password);
+
+    if (isValidPassword) {
+      return {
+        username: user.username,
+        role: user.role
+      };
+    }
+  }
+
+  throw new Error('Credenciais inválidas');
+};
+
+// Initialize admin user
+export const initializeAdmin = async () => {
+  const adminUser = await prisma.user.findUnique({
+    where: { username: ADMIN_USERNAME }
+  });
+
+  if (!adminUser) {
+    const hashedPassword = await hash(ADMIN_PASSWORD, 10);
+    await prisma.user.create({
+      data: {
+        username: ADMIN_USERNAME,
+        password: hashedPassword,
+        role: 'ADMIN',
+        active: true
       }
     });
   }
 
-  return {
-    username: user.username,
-    role: user.role
-  };
+  // Deactivate all non-admin users
+  await prisma.user.updateMany({
+    where: {
+      NOT: {
+        username: ADMIN_USERNAME
+      }
+    },
+    data: {
+      active: false
+    }
+  });
 };

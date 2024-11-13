@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import { useEffect } from "react";
 import { testConnection } from "@/lib/db";
+import { initializeAdmin } from "@/api/auth";
 import { toast } from "@/components/ui/use-toast";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
@@ -35,13 +36,14 @@ const AdminRoute = ({ children }: { children: React.ReactNode }) => {
 
 const App = () => {
   useEffect(() => {
-    const initDb = async () => {
+    const init = async () => {
       try {
         const isConnected = await testConnection();
         if (isConnected) {
+          await initializeAdmin();
           toast({
             title: "Conexão estabelecida",
-            description: "Banco de dados conectado com sucesso",
+            description: "Banco de dados inicializado com sucesso",
           });
         } else {
           toast({
@@ -60,7 +62,7 @@ const App = () => {
       }
     };
     
-    initDb();
+    init();
   }, []);
 
   return (
@@ -72,30 +74,9 @@ const App = () => {
             <Sonner />
             <Routes>
               <Route path="/login" element={<Login />} />
-              <Route
-                path="/"
-                element={
-                  <ProtectedRoute>
-                    <Index />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/admin"
-                element={
-                  <AdminRoute>
-                    <Admin />
-                  </AdminRoute>
-                }
-              />
-              <Route
-                path="/profile"
-                element={
-                  <ProtectedRoute>
-                    <Profile />
-                  </ProtectedRoute>
-                }
-              />
+              <Route path="/" element={<ProtectedRoute><Index /></ProtectedRoute>} />
+              <Route path="/admin" element={<AdminRoute><Admin /></AdminRoute>} />
+              <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
             </Routes>
           </TooltipProvider>
         </AuthProvider>

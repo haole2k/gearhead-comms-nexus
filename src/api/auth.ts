@@ -9,7 +9,7 @@ export const loginUser = async (username: string, password: string) => {
     throw new Error('Usuário não encontrado');
   }
 
-  if (user.password !== password) { // In production, use proper password hashing
+  if (user.password !== password) {
     throw new Error('Senha incorreta');
   }
 

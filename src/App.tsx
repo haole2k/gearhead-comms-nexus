@@ -12,7 +12,14 @@ import Login from "./pages/Login";
 import Admin from "./pages/Admin";
 import Profile from "./pages/Profile";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 1,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated } = useAuth();
@@ -29,16 +36,25 @@ const AdminRoute = ({ children }: { children: React.ReactNode }) => {
 const App = () => {
   useEffect(() => {
     const initDb = async () => {
-      const isConnected = await testConnection();
-      if (isConnected) {
+      try {
+        const isConnected = await testConnection();
+        if (isConnected) {
+          toast({
+            title: "Conexão estabelecida",
+            description: "Banco de dados conectado com sucesso",
+          });
+        } else {
+          toast({
+            title: "Erro de conexão",
+            description: "Não foi possível conectar ao banco de dados",
+            variant: "destructive",
+          });
+        }
+      } catch (error) {
+        console.error('Database initialization error:', error);
         toast({
-          title: "Conexão estabelecida",
-          description: "Banco de dados conectado com sucesso",
-        });
-      } else {
-        toast({
-          title: "Erro de conexão",
-          description: "Não foi possível conectar ao banco de dados",
+          title: "Erro de inicialização",
+          description: "Erro ao inicializar o banco de dados",
           variant: "destructive",
         });
       }

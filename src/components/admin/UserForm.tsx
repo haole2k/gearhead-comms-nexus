@@ -24,6 +24,18 @@ const formSchema = z.object({
   username: z.string().min(3, "Nome de usuário deve ter no mínimo 3 caracteres"),
   password: z.string().min(6, "Senha deve ter no mínimo 6 caracteres"),
   role: z.enum(["ADMIN", "USER"]),
+  teamRole: z.enum([
+    "MECHANIC",
+    "ENGINEER",
+    "STRATEGIST",
+    "DRIVER",
+    "TEAM_PRINCIPAL",
+    "PIT_CREW",
+    "AERODYNAMICIST",
+    "DATA_ANALYST",
+    "RACE_ENGINEER",
+    "TEST_DRIVER"
+  ]).optional(),
 });
 
 interface UserFormProps {
@@ -38,6 +50,7 @@ const UserForm = ({ onSubmit, defaultValues }: UserFormProps) => {
       username: "",
       password: "",
       role: "USER",
+      teamRole: "MECHANIC",
     },
   });
 
@@ -75,7 +88,7 @@ const UserForm = ({ onSubmit, defaultValues }: UserFormProps) => {
           name="role"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Função</FormLabel>
+              <FormLabel>Função no Sistema</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
@@ -85,6 +98,35 @@ const UserForm = ({ onSubmit, defaultValues }: UserFormProps) => {
                 <SelectContent>
                   <SelectItem value="USER">Usuário</SelectItem>
                   <SelectItem value="ADMIN">Administrador</SelectItem>
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="teamRole"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Função na Equipe</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Selecione uma função na equipe" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  <SelectItem value="MECHANIC">Mecânico</SelectItem>
+                  <SelectItem value="ENGINEER">Engenheiro</SelectItem>
+                  <SelectItem value="STRATEGIST">Estrategista</SelectItem>
+                  <SelectItem value="DRIVER">Piloto</SelectItem>
+                  <SelectItem value="TEAM_PRINCIPAL">Chefe de Equipe</SelectItem>
+                  <SelectItem value="PIT_CREW">Equipe de Pit Stop</SelectItem>
+                  <SelectItem value="AERODYNAMICIST">Aerodinamicista</SelectItem>
+                  <SelectItem value="DATA_ANALYST">Analista de Dados</SelectItem>
+                  <SelectItem value="RACE_ENGINEER">Engenheiro de Corrida</SelectItem>
+                  <SelectItem value="TEST_DRIVER">Piloto de Testes</SelectItem>
                 </SelectContent>
               </Select>
               <FormMessage />

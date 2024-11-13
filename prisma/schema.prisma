@@ -17,15 +17,28 @@ model User {
 }
 
 model Member {
-  id        String   @id @default(uuid())
+  id        String     @id @default(uuid())
   name      String
-  role      String
-  isTeamLead Boolean @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  role      TeamRole   @default(MECHANIC)
+  isTeamLead Boolean   @default(false)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
 }
 
 enum Role {
   ADMIN
   USER
+}
+
+enum TeamRole {
+  MECHANIC
+  ENGINEER
+  STRATEGIST
+  DRIVER
+  TEAM_PRINCIPAL
+  PIT_CREW
+  AERODYNAMICIST
+  DATA_ANALYST
+  RACE_ENGINEER
+  TEST_DRIVER
 }

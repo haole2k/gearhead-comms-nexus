@@ -17,13 +17,43 @@ const Index = () => {
     { id: 'pit-stop', name: 'Pit Stop', memberCount: 4 },
     { id: 'estrategia', name: 'Estratégia', memberCount: 3 },
     { id: 'mecanicos', name: 'Mecânicos', memberCount: 5 },
+    { id: 'telemetria', name: 'Telemetria', memberCount: 2 },
+    { id: 'emergencia', name: 'Emergência', memberCount: 1 },
   ];
 
   const members = [
-    { id: '1', name: 'João Silva', role: 'Chefe de Equipe', isOnline: true, isSpeaking: false },
-    { id: '2', name: 'Maria Santos', role: 'Piloto Principal', isOnline: true, isSpeaking: true },
-    { id: '3', name: 'Pedro Costa', role: 'Engenheiro Chefe', isOnline: true, isSpeaking: false },
-    { id: '4', name: 'Ana Oliveira', role: 'Estrategista', isOnline: false, isSpeaking: false },
+    { 
+      id: '1', 
+      name: 'João Silva', 
+      role: 'Chefe de Equipe', 
+      isOnline: true, 
+      isSpeaking: false,
+      isTeamLead: true 
+    },
+    { 
+      id: '2', 
+      name: 'Maria Santos', 
+      role: 'Piloto Principal', 
+      isOnline: true, 
+      isSpeaking: true,
+      lapTime: '1:32.456' 
+    },
+    { 
+      id: '3', 
+      name: 'Pedro Costa', 
+      role: 'Engenheiro Chefe', 
+      isOnline: true, 
+      isSpeaking: false,
+      lastActive: '2 min atrás' 
+    },
+    { 
+      id: '4', 
+      name: 'Ana Oliveira', 
+      role: 'Estrategista', 
+      isOnline: false, 
+      isSpeaking: false,
+      lastActive: '15 min atrás' 
+    },
   ];
 
   const handleChannelChange = (channelId: string) => {

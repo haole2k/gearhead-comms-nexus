@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useToast } from '@/components/ui/use-toast';
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -13,16 +14,36 @@ const AuthContext = createContext<AuthContextType | null>(null);
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<{ username: string; role: string } | null>(null);
   const navigate = useNavigate();
+  const { toast } = useToast();
 
   const login = async (username: string, password: string) => {
-    // Simplified authentication logic for browser environment
-    if (username === 'admin' && password === 'admin') {
-      const userData = { username: 'admin', role: 'ADMIN' };
+    try {
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Credenciais inválidas');
+      }
+
+      const userData = await response.json();
       setUser(userData);
       localStorage.setItem('user', JSON.stringify(userData));
       navigate('/');
-    } else {
-      throw new Error('Invalid credentials');
+      
+      toast({
+        title: "Login realizado com sucesso",
+        description: `Bem-vindo, ${userData.username}!`,
+      });
+    } catch (error) {
+      toast({
+        title: "Erro no login",
+        description: "Credenciais inválidas",
+        variant: "destructive",
+      });
+      throw error;
     }
   };
 
@@ -30,6 +51,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setUser(null);
     localStorage.removeItem('user');
     navigate('/login');
+    toast({
+      title: "Logout realizado",
+      description: "Até logo!",
+    });
   };
 
   useEffect(() => {

@@ -9,6 +9,8 @@ export async function testConnection() {
   } catch (error) {
     console.error('Database connection error:', error)
     return false
+  } finally {
+    await prisma.$disconnect()
   }
 }
 

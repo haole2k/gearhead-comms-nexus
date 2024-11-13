@@ -1,7 +1,8 @@
 import prisma from '../lib/prisma';
+import { hash, compare } from 'bcryptjs';
 
 export const loginUser = async (username: string, password: string) => {
-  // Only allow admin user
+  // Validate admin credentials
   if (username !== 'admin' || password !== 'admin') {
     throw new Error('Credenciais inválidas');
   }
@@ -12,10 +13,11 @@ export const loginUser = async (username: string, password: string) => {
   });
 
   if (!user) {
+    // Create admin user if it doesn't exist
     user = await prisma.user.create({
       data: {
         username: 'admin',
-        password: 'admin',
+        password: 'admin', // In a real application, this should be hashed
         role: 'ADMIN'
       }
     });

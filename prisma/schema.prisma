@@ -4,15 +4,15 @@ generator client {
 
 datasource db {
   provider = "sqlite"
-  url      = "file:./dev.db"
+  url      = env("DATABASE_URL")
 }
 
 model User {
   id        String   @id @default(uuid())
   username  String   @unique
   password  String
-  role      Role     @default(USER)
-  settings  Json?    // Para configurações personalizadas
+  role      String   @default("USER")
+  settings  String?  // Stored as JSON string
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -20,7 +20,7 @@ model User {
 model Member {
   id              String     @id @default(uuid())
   name            String
-  role            TeamRole   @default(MECHANIC)
+  role            String     @default("MECHANIC")
   isTeamLead      Boolean    @default(false)
   isOnline        Boolean    @default(false)
   isSpeaking      Boolean    @default(false)
@@ -30,7 +30,7 @@ model Member {
   privateMessages PrivateMessage[] @relation("SentMessages")
   receivedMessages PrivateMessage[] @relation("ReceivedMessages")
   recordings      Recording[]
-  settings        Json?      // Para configurações personalizadas
+  settings        String?    // Stored as JSON string
   createdAt       DateTime   @default(now())
   updatedAt       DateTime   @updatedAt
 }
@@ -38,10 +38,10 @@ model Member {
 model Channel {
   id          String    @id @default(uuid())
   name        String
-  type        ChannelType
+  type        String    // Using string instead of enum
   memberCount Int       @default(0)
-  isActive    Boolean   @default(true)
-  isCompact   Boolean   @default(false)  // Para modo de visualização compacta
+  isActive    Boolean   @default(false)
+  isCompact   Boolean   @default(false)
   messages    Communication[]
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
@@ -53,10 +53,10 @@ model Communication {
   channelId String
   channel   Channel   @relation(fields: [channelId], references: [id])
   message   String
-  type      MessageType
-  priority  Priority  @default(NORMAL)
+  type      String    // Using string instead of enum
+  priority  String    @default("NORMAL")
   timestamp DateTime  @default(now())
-  keywords  String[]  // Para priorização automática
+  keywords  String    // Store as comma-separated string
   createdAt DateTime  @default(now())
 }
 
@@ -88,44 +88,4 @@ model TelemetryData {
   tireWear  Float
   lapTime   String?
   timestamp DateTime @default(now())
-}
-
-enum Role {
-  ADMIN
-  USER
-}
-
-enum TeamRole {
-  MECHANIC
-  ENGINEER
-  STRATEGIST
-  DRIVER
-  TEAM_PRINCIPAL
-  PIT_CREW
-  AERODYNAMICIST
-  DATA_ANALYST
-  RACE_ENGINEER
-  TEST_DRIVER
-}
-
-enum ChannelType {
-  GENERAL
-  PIT_STOP
-  STRATEGY
-  TELEMETRY
-  EMERGENCY
-}
-
-enum MessageType {
-  VOICE
-  TEXT
-  ALERT
-  TELEMETRY
-}
-
-enum Priority {
-  LOW
-  NORMAL
-  HIGH
-  EMERGENCY
 }

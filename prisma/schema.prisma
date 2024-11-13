@@ -12,22 +12,27 @@ model User {
   username  String   @unique
   password  String
   role      Role     @default(USER)
+  settings  Json?    // Para configurações personalizadas
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model Member {
-  id            String     @id @default(uuid())
-  name          String
-  role          TeamRole   @default(MECHANIC)
-  isTeamLead    Boolean    @default(false)
-  isOnline      Boolean    @default(false)
-  isSpeaking    Boolean    @default(false)
-  lastActive    DateTime   @default(now())
-  currentChannel String?
-  lapTime       String?
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime   @updatedAt
+  id              String     @id @default(uuid())
+  name            String
+  role            TeamRole   @default(MECHANIC)
+  isTeamLead      Boolean    @default(false)
+  isOnline        Boolean    @default(false)
+  isSpeaking      Boolean    @default(false)
+  lastActive      DateTime   @default(now())
+  currentChannel  String?
+  lapTime         String?
+  privateMessages PrivateMessage[] @relation("SentMessages")
+  receivedMessages PrivateMessage[] @relation("ReceivedMessages")
+  recordings      Recording[]
+  settings        Json?      // Para configurações personalizadas
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
 }
 
 model Channel {
@@ -36,6 +41,8 @@ model Channel {
   type        ChannelType
   memberCount Int       @default(0)
   isActive    Boolean   @default(true)
+  isCompact   Boolean   @default(false)  // Para modo de visualização compacta
+  messages    Communication[]
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 }
@@ -44,10 +51,43 @@ model Communication {
   id        String    @id @default(uuid())
   senderId  String
   channelId String
+  channel   Channel   @relation(fields: [channelId], references: [id])
   message   String
   type      MessageType
   priority  Priority  @default(NORMAL)
+  timestamp DateTime  @default(now())
+  keywords  String[]  // Para priorização automática
   createdAt DateTime  @default(now())
+}
+
+model PrivateMessage {
+  id          String   @id @default(uuid())
+  senderId    String
+  sender      Member   @relation("SentMessages", fields: [senderId], references: [id])
+  receiverId  String
+  receiver    Member   @relation("ReceivedMessages", fields: [receiverId], references: [id])
+  message     String
+  isRead      Boolean  @default(false)
+  createdAt   DateTime @default(now())
+}
+
+model Recording {
+  id        String   @id @default(uuid())
+  memberId  String
+  member    Member   @relation(fields: [memberId], references: [id])
+  url       String
+  duration  Int      // em segundos
+  createdAt DateTime @default(now())
+}
+
+model TelemetryData {
+  id        String   @id @default(uuid())
+  carId     String
+  speed     Float
+  fuel      Float
+  tireWear  Float
+  lapTime   String?
+  timestamp DateTime @default(now())
 }
 
 enum Role {

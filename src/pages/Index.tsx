@@ -3,10 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import Channel, { ChannelType } from '../components/Channel';
 import MemberStatus from '../components/MemberStatus';
 import AudioControls from '../components/AudioControls';
+import TelemetryChart from '../components/TelemetryChart';
 import { useToast } from '@/components/ui/use-toast';
 import { Menu, X, Radio, UserRound, LayoutDashboard } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
+import CompactChannel from '../components/CompactChannel';
 
 const Index = () => {
   const { toast } = useToast();
@@ -16,6 +18,8 @@ const Index = () => {
   const [isMuted, setIsMuted] = useState(false);
   const [isDeafened, setIsDeafened] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isCompactMode, setIsCompactMode] = useState(false);
+  const [showTelemetry, setShowTelemetry] = useState(false);
 
   const channels = [
     { id: 'geral', name: 'Geral', type: 'general' as ChannelType, memberCount: 8 },
@@ -69,6 +73,27 @@ const Index = () => {
       description: `Você entrou no canal ${channels.find(c => c.id === channelId)?.name}`,
     });
   };
+
+  // Adicionar handler para atalhos de teclado
+  React.useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      // Alt + M para mutar/desmutar
+      if (e.altKey && e.key === 'm') {
+        setIsMuted(!isMuted);
+      }
+      // Alt + V para alternar modo compacto
+      if (e.altKey && e.key === 'v') {
+        setIsCompactMode(!isCompactMode);
+      }
+      // Alt + T para mostrar/esconder telemetria
+      if (e.altKey && e.key === 't') {
+        setShowTelemetry(!showTelemetry);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, [isMuted, isCompactMode, showTelemetry]);
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
@@ -142,14 +167,25 @@ const Index = () => {
           </div>
           <div className="space-y-1">
             {channels.map((channel) => (
-              <Channel
-                key={channel.id}
-                name={channel.name}
-                type={channel.type}
-                isActive={activeChannel === channel.id}
-                onClick={() => handleChannelChange(channel.id)}
-                memberCount={channel.memberCount}
-              />
+              isCompactMode ? (
+                <CompactChannel
+                  key={channel.id}
+                  name={channel.name}
+                  type={channel.type}
+                  isActive={activeChannel === channel.id}
+                  onClick={() => handleChannelChange(channel.id)}
+                  memberCount={channel.memberCount}
+                />
+              ) : (
+                <Channel
+                  key={channel.id}
+                  name={channel.name}
+                  type={channel.type}
+                  isActive={activeChannel === channel.id}
+                  onClick={() => handleChannelChange(channel.id)}
+                  memberCount={channel.memberCount}
+                />
+              )
             ))}
           </div>
         </div>
@@ -166,12 +202,33 @@ const Index = () => {
               <MemberStatus key={member.id} member={member} />
             ))}
           </div>
+
+          {showTelemetry && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+              <TelemetryChart
+                data={[]} // Adicionar dados reais aqui
+                title="Velocidade"
+                dataKey="speed"
+              />
+              <TelemetryChart
+                data={[]} // Adicionar dados reais aqui
+                title="Combustível"
+                dataKey="fuel"
+                color="#FF9900"
+              />
+            </div>
+          )}
         </div>
         <AudioControls
           isMuted={isMuted}
           isDeafened={isDeafened}
           onToggleMute={() => setIsMuted(!isMuted)}
           onToggleDeafen={() => setIsDeafened(!isDeafened)}
+          shortcuts={{
+            mute: 'Alt + M',
+            viewMode: 'Alt + V',
+            telemetry: 'Alt + T'
+          }}
         />
       </div>
     </div>

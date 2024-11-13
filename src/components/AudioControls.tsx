@@ -15,6 +15,11 @@ interface AudioControlsProps {
   onPTT?: (active: boolean) => void;
   onVolumeChange?: (value: number) => void;
   onEmergencyAlert?: () => void;
+  shortcuts?: {
+    mute?: string;
+    viewMode?: string;
+    telemetry?: string;
+  };
 }
 
 const AudioControls: React.FC<AudioControlsProps> = ({
@@ -27,7 +32,8 @@ const AudioControls: React.FC<AudioControlsProps> = ({
   onToggleDeafen,
   onPTT,
   onVolumeChange,
-  onEmergencyAlert
+  onEmergencyAlert,
+  shortcuts
 }) => {
   return (
     <div className="flex items-center justify-between md:justify-start space-x-4 bg-racing-black p-4 border-t border-racing-gray border-opacity-20">
@@ -97,6 +103,20 @@ const AudioControls: React.FC<AudioControlsProps> = ({
           </Button>
         )}
       </div>
+
+      {shortcuts && (
+        <div className="hidden md:flex items-center space-x-4 text-xs text-racing-gray">
+          {shortcuts.mute && (
+            <span>Mutar: {shortcuts.mute}</span>
+          )}
+          {shortcuts.viewMode && (
+            <span>Modo de visualização: {shortcuts.viewMode}</span>
+          )}
+          {shortcuts.telemetry && (
+            <span>Telemetria: {shortcuts.telemetry}</span>
+          )}
+        </div>
+      )}
     </div>
   );
 };

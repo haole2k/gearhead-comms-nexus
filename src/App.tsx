@@ -7,6 +7,7 @@ import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import { useEffect } from "react";
 import { testDatabaseConnection } from "@/api/authApi";
 import { toast } from "@/components/ui/use-toast";
+import { logError } from "@/utils/logger";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
 import Admin from "./pages/Admin";
@@ -44,6 +45,8 @@ const App = () => {
             description: "Banco de dados inicializado com sucesso",
           });
         } else {
+          const error = new Error("Não foi possível conectar ao banco de dados");
+          logError(error, "Database Connection");
           toast({
             title: "Erro de conexão",
             description: "Não foi possível conectar ao banco de dados",
@@ -51,6 +54,7 @@ const App = () => {
           });
         }
       } catch (error) {
+        logError(error as Error, "Database Initialization");
         console.error('Database initialization error:', error);
         toast({
           title: "Erro de inicialização",

@@ -1,11 +1,11 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/components/ui/use-toast';
-import { loginUser } from '@/api/auth';
+import { loginApi } from '@/api/authApi';
 
 interface AuthContextType {
   isAuthenticated: boolean;
-  user: { username: string; role: string } | null;
+  user: { username: string; role: string; teamRole?: string } | null;
   login: (username: string, password: string) => Promise<void>;
   logout: () => void;
 }
@@ -13,13 +13,13 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<{ username: string; role: string } | null>(null);
+  const [user, setUser] = useState<{ username: string; role: string; teamRole?: string } | null>(null);
   const navigate = useNavigate();
   const { toast } = useToast();
 
   const login = async (username: string, password: string) => {
     try {
-      const userData = await loginUser(username, password);
+      const userData = await loginApi(username, password);
       setUser(userData);
       localStorage.setItem('user', JSON.stringify(userData));
       navigate('/');

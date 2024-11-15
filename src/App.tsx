@@ -5,8 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import { useEffect } from "react";
-import { testConnection } from "@/lib/db";
-import { initializeAdmin } from "@/api/auth";
+import { testDatabaseConnection } from "@/api/authApi";
 import { toast } from "@/components/ui/use-toast";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
@@ -38,9 +37,8 @@ const App = () => {
   useEffect(() => {
     const init = async () => {
       try {
-        const isConnected = await testConnection();
+        const isConnected = await testDatabaseConnection();
         if (isConnected) {
-          await initializeAdmin();
           toast({
             title: "Conexão estabelecida",
             description: "Banco de dados inicializado com sucesso",

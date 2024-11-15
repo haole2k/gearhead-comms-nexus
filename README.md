@@ -1,151 +1,70 @@
 # Bacarin Racing - Comunicador de Equipe
 
-Uma aplicação de comunicação em tempo real desenvolvida especialmente para a equipe Bacarin Racing, permitindo comunicação eficiente entre membros da equipe durante corridas e treinos.
+Aplicação de comunicação em tempo real para a equipe Bacarin Racing, permitindo comunicação eficiente durante corridas e treinos.
 
-## 🚀 Tecnologias Utilizadas
+## 🚀 Tecnologias
 
-- React
-- TypeScript
-- Tailwind CSS
-- Shadcn/UI
+- React + TypeScript
+- Tailwind CSS + Shadcn/UI
+- Prisma + PostgreSQL
+- React Query
 - React Router DOM
-- Tanstack Query
-- Lucide Icons
-- Sonner (Notificações)
 
-## 📋 Pré-requisitos
+## 📋 Requisitos
 
-Antes de começar, você precisa ter instalado em sua máquina:
-
-- Node.js (versão 16 ou superior)
-- npm ou yarn
+- Node.js (v16+)
+- npm/yarn
 - Git
 
-## 🔧 Instalação e Configuração
+## 🔧 Instalação
 
-### Clonar o Repositório
 ```bash
+# Clone
 git clone https://github.com/seu-usuario/bacarin-racing-comms.git
 cd bacarin-racing-comms
-```
 
-### Instalar Dependências
-```bash
+# Instale dependências
 npm install
-# ou
-yarn install
-```
 
-### Configurar Variáveis de Ambiente
-1. Copie o arquivo `.env.example` para `.env`
-2. Preencha as variáveis de ambiente necessárias
+# Configure .env
+cp .env.example .env
 
-### Gerar Prisma Client
-```bash
+# Gere Prisma Client
 npx prisma generate
-```
 
-### Executar Migrations do Banco de Dados
-```bash
-npx prisma migrate dev
-```
-
-### Iniciar Servidor de Desenvolvimento
-```bash
+# Inicie
 npm run dev
-# ou
-yarn dev
-```
-
-### Acessar a Aplicação
-Abra seu navegador em:
-```
-http://localhost:5173
-```
-
-### Comandos Adicionais
-
-#### Rodar Testes
-```bash
-npm test
-# ou
-yarn test
-```
-
-#### Build para Produção
-```bash
-npm run build
-# ou
-yarn build
-```
-
-#### Visualizar Build de Produção
-```bash
-npm run preview
-# ou
-yarn preview
 ```
 
 ## 🎨 Funcionalidades
 
-- Sistema de canais de comunicação em tempo real
-- Indicadores de status dos membros (online/offline/falando)
-- Controles de áudio (mute/unmute/deafen)
-- Interface responsiva e moderna
-- Animações suaves para melhor feedback visual
-- Tooltips informativos para melhor usabilidade
-- Sistema de notificações para eventos importantes
-- Suporte a temas claro/escuro
-- Layout otimizado para dispositivos móveis
+- Canais de comunicação em tempo real
+- Status dos membros (online/offline)
+- Controles de áudio
+- Interface responsiva
+- Sistema de notificações
+- Temas claro/escuro
 
-## 🖥️ Ambiente de Desenvolvimento
+## 🖥️ Desenvolvimento
 
-Para um ambiente de desenvolvimento ideal, recomendamos:
-
-- VS Code com as extensões:
-  - ESLint
-  - Prettier
-  - Tailwind CSS IntelliSense
-  - TypeScript + JavaScript
-- Chrome DevTools para debugging
+Recomendamos:
+- VS Code + ESLint + Prettier
+- Chrome DevTools
 - React Developer Tools
 
 ## 📱 Layout Responsivo
 
-A aplicação é totalmente responsiva e se adapta a diferentes tamanhos de tela:
 - Desktop (1024px+)
 - Tablet (768px - 1023px)
-- Dispositivos móveis (<768px)
-
-## 🔒 Boas Práticas
-
-- Código tipado com TypeScript
-- Componentes reutilizáveis
-- Hooks personalizados
-- Gerenciamento de estado com React Query
-- Padrões de commits convencionais
-- Testes unitários (Jest + Testing Library)
-
-## 🤝 Contribuindo
-
-1. Faça um fork do projeto
-2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
-3. Commit suas mudanças (`git commit -m 'feat: Add some AmazingFeature'`)
-4. Push para a branch (`git push origin feature/AmazingFeature`)
-5. Abra um Pull Request
-
-## 📝 Licença
-
-Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+- Mobile (<768px)
 
 ## 🏁 Bacarin Racing
 
-Desenvolvido especialmente para a equipe Bacarin Racing, mantendo as cores e identidade visual da equipe.
+Desenvolvido para a equipe Bacarin Racing.
 
 ## 📞 Suporte
 
-Para reportar bugs ou sugerir novas funcionalidades, por favor abra uma [issue](https://github.com/seu-usuario/bacarin-racing-comms/issues).
+Para bugs ou sugestões, abra uma [issue](https://github.com/seu-usuario/bacarin-racing-comms/issues).
 
-## 🛠️ Desenvolvido por
-
-[Devsign Sistemas](https://www.devsign.com.br)
+---
+Desenvolvido por [Devsign Sistemas](https://www.devsign.com.br)

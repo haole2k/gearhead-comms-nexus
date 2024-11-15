@@ -10,36 +10,34 @@ export const loginUser = async (username: string, password: string) => {
     where: { username }
   });
 
-  // If no user exists and it's trying to login as admin, create admin account
-  if (!user && username === ADMIN_USERNAME) {
-    const hashedPassword = await hash(ADMIN_PASSWORD, 10);
-    const newAdminUser = await prisma.user.create({
-      data: {
-        username: ADMIN_USERNAME,
-        password: hashedPassword,
-        role: 'ADMIN',
-        active: true
-      }
-    });
-    
-    if (password === ADMIN_PASSWORD) {
-      return {
-        username: newAdminUser.username,
-        role: newAdminUser.role
-      };
+  // Se é o admin tentando fazer login
+  if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+    // Se o usuário admin não existe, cria ele
+    if (!user) {
+      const hashedPassword = await hash(ADMIN_PASSWORD, 10);
+      const newAdminUser = await prisma.user.create({
+        data: {
+          username: ADMIN_USERNAME,
+          password: hashedPassword,
+          role: 'ADMIN',
+          active: true
+        }
+      });
     }
+    
+    return {
+      username: ADMIN_USERNAME,
+      role: 'ADMIN'
+    };
   }
 
-  // If user exists, verify password and active status
+  // Para outros usuários, verifica senha normalmente
   if (user) {
     if (!user.active) {
       throw new Error('Usuário inativo');
     }
 
-    const isAdmin = user.username === ADMIN_USERNAME;
-    const isValidPassword = isAdmin 
-      ? password === ADMIN_PASSWORD 
-      : await compare(password, user.password);
+    const isValidPassword = await compare(password, user.password);
 
     if (isValidPassword) {
       return {

@@ -18,6 +18,20 @@ start /B C:\xampp\mysql\bin\mysqld.exe
 REM Aguarda o MySQL iniciar
 timeout /t 5 /nobreak > nul
 
+REM Testa conexao MySQL
+echo Testando conexao MySQL...
+C:\xampp\mysql\bin\mysql -u root -e "SELECT 1" 2>nul
+if errorlevel 1 (
+    echo ERRO: Nao foi possivel conectar ao MySQL
+    echo Verifique se:
+    echo 1. O XAMPP esta instalado em C:\xampp
+    echo 2. O servico MySQL esta iniciado
+    echo 3. A porta 3306 esta disponivel
+    echo 4. O usuario root nao possui senha
+    pause
+    exit
+)
+
 REM Instala dependencias
 echo Instalando dependencias...
 call npm install

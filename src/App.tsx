@@ -12,7 +12,6 @@ import Index from "./pages/Index";
 import Login from "./pages/Login";
 import Admin from "./pages/Admin";
 import Profile from "./pages/Profile";
-import Install from "./pages/Install";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -33,11 +32,6 @@ const AdminRoute = ({ children }: { children: React.ReactNode }) => {
   if (!isAuthenticated) return <Navigate to="/login" />;
   if (user?.role !== 'ADMIN') return <Navigate to="/" />;
   return <>{children}</>;
-};
-
-const InstallationCheck = ({ children }: { children: React.ReactNode }) => {
-  const installed = localStorage.getItem('installed') === 'true';
-  return installed ? <>{children}</> : <Navigate to="/install" />;
 };
 
 const App = () => {
@@ -68,9 +62,7 @@ const App = () => {
       }
     };
     
-    if (localStorage.getItem('installed') === 'true') {
-      init();
-    }
+    init();
   }, []);
 
   return (
@@ -81,36 +73,21 @@ const App = () => {
             <Toaster />
             <Sonner />
             <Routes>
-              <Route path="/install" element={
-                localStorage.getItem('installed') === 'true' 
-                  ? <Navigate to="/login" /> 
-                  : <Install />
-              } />
-              <Route path="/login" element={
-                <InstallationCheck>
-                  <Login />
-                </InstallationCheck>
-              } />
+              <Route path="/login" element={<Login />} />
               <Route path="/" element={
-                <InstallationCheck>
-                  <ProtectedRoute>
-                    <Index />
-                  </ProtectedRoute>
-                </InstallationCheck>
+                <ProtectedRoute>
+                  <Index />
+                </ProtectedRoute>
               } />
               <Route path="/admin" element={
-                <InstallationCheck>
-                  <AdminRoute>
-                    <Admin />
-                  </AdminRoute>
-                </InstallationCheck>
+                <AdminRoute>
+                  <Admin />
+                </AdminRoute>
               } />
               <Route path="/profile" element={
-                <InstallationCheck>
-                  <ProtectedRoute>
-                    <Profile />
-                  </ProtectedRoute>
-                </InstallationCheck>
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
               } />
             </Routes>
           </TooltipProvider>

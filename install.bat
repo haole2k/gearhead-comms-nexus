@@ -46,11 +46,11 @@ call npx prisma generate
 
 REM Inicia a aplicacao
 echo Iniciando aplicacao...
-start http://localhost:5173
+start http://localhost:8080
 call npm run dev
 
 echo.
-echo Aplicacao iniciada! Acesse: http://localhost:5173
+echo Aplicacao iniciada! Acesse: http://localhost:8080
 echo.
 echo Usuario padrao: admin
 echo Senha padrao: admin

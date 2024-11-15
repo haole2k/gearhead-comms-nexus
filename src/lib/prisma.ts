@@ -9,6 +9,6 @@ const prisma = globalForPrisma.prisma ?? new PrismaClient({
   datasourceUrl: import.meta.env.VITE_DATABASE_URL
 })
 
-if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
+if (import.meta.env.MODE !== 'production') globalForPrisma.prisma = prisma
 
 export default prisma

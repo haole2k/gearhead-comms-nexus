@@ -5,49 +5,38 @@ const ADMIN_USERNAME = 'admin';
 const ADMIN_PASSWORD = 'admin';
 
 export const loginUser = async (username: string, password: string) => {
-  // Find user
+  // Direct admin login check
+  if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+    return {
+      username: ADMIN_USERNAME,
+      role: 'ADMIN',
+      teamRole: 'TEAM_PRINCIPAL'
+    };
+  }
+
+  // Regular user login
   const user = await prisma.user.findUnique({
     where: { username }
   });
 
-  // Se é o admin tentando fazer login
-  if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
-    // Se o usuário admin não existe, cria ele
-    if (!user) {
-      const hashedPassword = await hash(ADMIN_PASSWORD, 10);
-      const newAdminUser = await prisma.user.create({
-        data: {
-          username: ADMIN_USERNAME,
-          password: hashedPassword,
-          role: 'ADMIN',
-          active: true
-        }
-      });
-    }
-    
-    return {
-      username: ADMIN_USERNAME,
-      role: 'ADMIN'
-    };
+  if (!user) {
+    throw new Error('Credenciais inválidas');
   }
 
-  // Para outros usuários, verifica senha normalmente
-  if (user) {
-    if (!user.active) {
-      throw new Error('Usuário inativo');
-    }
-
-    const isValidPassword = await compare(password, user.password);
-
-    if (isValidPassword) {
-      return {
-        username: user.username,
-        role: user.role
-      };
-    }
+  if (!user.active) {
+    throw new Error('Usuário inativo');
   }
 
-  throw new Error('Credenciais inválidas');
+  const isValidPassword = await compare(password, user.password);
+  if (!isValidPassword) {
+    throw new Error('Credenciais inválidas');
+  }
+
+  return {
+    username: user.username,
+    role: user.role,
+    teamRole: user.teamRole
+  };
 };
 
 // Initialize admin user
@@ -63,20 +52,9 @@ export const initializeAdmin = async () => {
         username: ADMIN_USERNAME,
         password: hashedPassword,
         role: 'ADMIN',
+        teamRole: 'TEAM_PRINCIPAL',
         active: true
       }
     });
   }
-
-  // Deactivate all non-admin users
-  await prisma.user.updateMany({
-    where: {
-      NOT: {
-        username: ADMIN_USERNAME
-      }
-    },
-    data: {
-      active: false
-    }
-  });
 };

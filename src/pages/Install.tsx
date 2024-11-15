@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { testConnection } from "@/lib/db";
+import { db } from "@/lib/db";
 
 const Install = () => {
   const navigate = useNavigate();
@@ -27,29 +27,23 @@ const Install = () => {
     e.preventDefault();
     
     try {
-      const connectionString = `mysql://${formData.user}:${formData.password}@${formData.host}:${formData.port}/${formData.database}`;
+      const success = await db.initializeDatabase(formData);
       
-      // Save connection string to localStorage temporarily
-      localStorage.setItem('dbConfig', connectionString);
-      
-      // Test connection
-      const isConnected = await testConnection();
-      
-      if (isConnected) {
+      if (success) {
         toast({
-          title: "Conexão estabelecida",
+          title: "Instalação concluída",
           description: "Banco de dados configurado com sucesso!",
         });
         
-        // Remove installation route
+        // Mark as installed
         localStorage.setItem('installed', 'true');
         
         // Redirect to login
         navigate('/login');
       } else {
         toast({
-          title: "Erro de conexão",
-          description: "Não foi possível conectar ao banco de dados. Verifique as credenciais.",
+          title: "Erro de instalação",
+          description: "Não foi possível configurar o banco de dados. Verifique as credenciais.",
           variant: "destructive",
         });
       }

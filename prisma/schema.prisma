@@ -8,11 +8,25 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  username  String   @unique
+  id        String    @id @default(uuid())
+  username  String    @unique
   password  String
-  role      String   @default("USER")
-  active    Boolean  @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  role      String    @default("USER")
+  teamRole  TeamRole  @default(MECHANIC)
+  active    Boolean   @default(true)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+enum TeamRole {
+  MECHANIC
+  ENGINEER
+  STRATEGIST
+  DRIVER
+  TEAM_PRINCIPAL
+  PIT_CREW
+  AERODYNAMICIST
+  DATA_ANALYST
+  RACE_ENGINEER
+  TEST_DRIVER
 }

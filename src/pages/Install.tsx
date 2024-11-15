@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,6 +15,13 @@ const Install = () => {
     password: '',
     database: 'bacarin_racing'
   });
+
+  useEffect(() => {
+    // Check if already installed and redirect
+    if (localStorage.getItem('installed') === 'true') {
+      navigate('/login');
+    }
+  }, [navigate]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -38,8 +45,10 @@ const Install = () => {
         // Mark as installed
         localStorage.setItem('installed', 'true');
         
-        // Redirect to login
-        navigate('/login');
+        // Redirect to login after a short delay
+        setTimeout(() => {
+          navigate('/login');
+        }, 1500); // Give time for the toast to be visible
       } else {
         toast({
           title: "Erro de instalação",

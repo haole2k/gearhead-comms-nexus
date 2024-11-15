@@ -1,4 +1,4 @@
-const { exec } = require('pkg');
+import { exec } from 'pkg';
 
 async function buildExecutable() {
   try {

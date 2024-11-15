@@ -1,36 +1,44 @@
 import prisma from './prisma';
-import { exec } from 'child_process';
-import { promisify } from 'util';
-import * as fs from 'fs';
-import * as path from 'path';
 
-const execAsync = promisify(exec);
-
-export async function initializeDatabase(config: {
+interface DatabaseConfig {
   host: string;
   port: string;
   user: string;
   password: string;
   database: string;
-}) {
+}
+
+export async function initializeDatabase(config: DatabaseConfig) {
   try {
     // Create connection string
     const connectionString = `mysql://${config.user}:${config.password}@${config.host}:${config.port}/${config.database}`;
     
-    // Save to .env
-    const envContent = `VITE_DATABASE_URL="${connectionString}"`;
-    fs.writeFileSync('.env', envContent);
+    // Save connection string to localStorage temporarily
+    localStorage.setItem('dbConnectionString', connectionString);
 
-    // Execute SQL script
-    const sqlPath = path.join(process.cwd(), 'prisma', 'schema.sql');
-    const sqlScript = fs.readFileSync(sqlPath, 'utf8');
-    
-    await execAsync(`mysql -h ${config.host} -P ${config.port} -u ${config.user} -p${config.password} < "${sqlPath}"`);
+    // Initialize database using API endpoint
+    const response = await fetch('/api/initialize-database', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(config),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to initialize database');
+    }
 
     // Test connection
-    await testConnection();
-
-    return true;
+    const isConnected = await testConnection();
+    
+    if (isConnected) {
+      // Save to localStorage to mark as installed
+      localStorage.setItem('installed', 'true');
+      return true;
+    }
+    
+    return false;
   } catch (error) {
     console.error('Database initialization error:', error);
     return false;

@@ -10,13 +10,9 @@ interface DatabaseConfig {
 
 export async function initializeDatabase(config: DatabaseConfig) {
   try {
-    // Create connection string
     const connectionString = `mysql://${config.user}:${config.password}@${config.host}:${config.port}/${config.database}`;
-    
-    // Save connection string to localStorage temporarily
     localStorage.setItem('dbConnectionString', connectionString);
 
-    // Initialize database using API endpoint
     const response = await fetch('/api/initialize-database', {
       method: 'POST',
       headers: {
@@ -29,11 +25,9 @@ export async function initializeDatabase(config: DatabaseConfig) {
       throw new Error('Failed to initialize database');
     }
 
-    // Test connection
     const isConnected = await testConnection();
     
     if (isConnected) {
-      // Save to localStorage to mark as installed
       localStorage.setItem('installed', 'true');
       return true;
     }
@@ -48,11 +42,13 @@ export async function initializeDatabase(config: DatabaseConfig) {
 export async function testConnection() {
   try {
     await prisma.$connect();
-    await prisma.$queryRaw`SELECT 1`;
-    return true;
+    const result = await prisma.$queryRaw`SELECT 1`;
+    return Array.isArray(result) && result.length > 0;
   } catch (error) {
     console.error('Database connection error:', error);
     return false;
+  } finally {
+    await prisma.$disconnect();
   }
 }
 

@@ -1,18 +1,15 @@
+
 import { Users, UserCheck, Activity } from "lucide-react";
 import { StatCard } from "./StatCard";
 import { UsersChart } from "./UsersChart";
 import { MembersDistributionChart } from "./MembersDistributionChart";
 import { useQuery } from "@tanstack/react-query";
-import prisma from "@/lib/prisma";
+import { getStatsApi } from "@/api/usersApi";
 
 export function Dashboard() {
   const { data: stats } = useQuery({
     queryKey: ['dashboard-stats'],
-    queryFn: async () => {
-      const response = await fetch('/api/stats');
-      if (!response.ok) throw new Error('Failed to fetch stats');
-      return response.json();
-    }
+    queryFn: getStatsApi
   });
 
   return (
@@ -21,13 +18,13 @@ export function Dashboard() {
       <div className="grid gap-4 md:grid-cols-3">
         <StatCard
           title="Total de Usuários"
-          value={stats?.totalUsers || '0'}
-          description={stats?.userGrowth || 'Carregando...'}
+          value={stats?.totalUsers?.toString() || '0'}
+          description={stats?.adminPercentage || 'Carregando...'}
           icon={<Users className="h-4 w-4 text-racing-green" />}
         />
         <StatCard
           title="Membros Ativos"
-          value={stats?.activeMembers || '0'}
+          value={stats?.activeMembers?.toString() || '0'}
           description={stats?.activeMembersPercentage || 'Carregando...'}
           icon={<UserCheck className="h-4 w-4 text-racing-green" />}
         />

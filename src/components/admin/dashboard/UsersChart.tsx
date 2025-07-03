@@ -1,15 +1,13 @@
+
 import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useQuery } from "@tanstack/react-query";
+import { getUserGrowthApi } from "@/api/usersApi";
 
 export function UsersChart() {
   const { data: userGrowth } = useQuery({
     queryKey: ['user-growth'],
-    queryFn: async () => {
-      const response = await fetch('/api/stats/user-growth');
-      if (!response.ok) throw new Error('Failed to fetch user growth data');
-      return response.json();
-    }
+    queryFn: getUserGrowthApi
   });
 
   return (

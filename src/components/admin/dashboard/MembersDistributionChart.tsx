@@ -1,17 +1,13 @@
+
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useQuery } from "@tanstack/react-query";
+
+const mockData = [
+  { name: 'Ativos', value: 75 },
+  { name: 'Inativos', value: 25 }
+];
 
 export function MembersDistributionChart() {
-  const { data: memberDistribution } = useQuery({
-    queryKey: ['member-distribution'],
-    queryFn: async () => {
-      const response = await fetch('/api/stats/member-distribution');
-      if (!response.ok) throw new Error('Failed to fetch member distribution');
-      return response.json();
-    }
-  });
-
   const COLORS = ["#00FF00", "#1A1A1A"];
 
   return (
@@ -24,7 +20,7 @@ export function MembersDistributionChart() {
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
-                data={memberDistribution || []}
+                data={mockData}
                 cx="50%"
                 cy="50%"
                 innerRadius={60}
@@ -32,7 +28,7 @@ export function MembersDistributionChart() {
                 paddingAngle={5}
                 dataKey="value"
               >
-                {(memberDistribution || []).map((_, index) => (
+                {mockData.map((_, index) => (
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>

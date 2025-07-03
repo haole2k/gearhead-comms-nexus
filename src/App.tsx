@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -7,7 +8,6 @@ import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import { useEffect } from "react";
 import { testDatabaseConnection } from "@/api/authApi";
 import { toast } from "@/components/ui/use-toast";
-import { logError } from "@/utils/logger";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
 import Admin from "./pages/Admin";
@@ -41,26 +41,12 @@ const App = () => {
         const isConnected = await testDatabaseConnection();
         if (isConnected) {
           toast({
-            title: "Conexão estabelecida",
-            description: "Banco de dados inicializado com sucesso",
-          });
-        } else {
-          const error = new Error("Não foi possível conectar ao banco de dados");
-          logError(error, "Database Connection");
-          toast({
-            title: "Erro de conexão",
-            description: "Não foi possível conectar ao banco de dados",
-            variant: "destructive",
+            title: "Sistema inicializado",
+            description: "Aplicação pronta para uso",
           });
         }
       } catch (error) {
-        logError(error as Error, "Database Initialization");
-        console.error('Database initialization error:', error);
-        toast({
-          title: "Erro de inicialização",
-          description: "Erro ao inicializar o banco de dados",
-          variant: "destructive",
-        });
+        console.error('Initialization error:', error);
       }
     };
     
